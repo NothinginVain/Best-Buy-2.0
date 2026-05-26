@@ -30,16 +30,14 @@ class Product:
             raise ValueError("Names is required")
 
         if not price or price <= 0:
-            raise ValueError("Price must be above 0")
+            raise ValueError("Price must be greater than 0")
 
-        if not quantity or quantity < 0:
+        if quantity < 0:
             raise ValueError("Quantity must be a positive number")
-        try:
-            self.name = name
-            self.price = price
-            self.quantity = quantity
-        except ValueError as e:
-            print(e)
+
+        self.name = name
+        self.price = price
+        self.quantity = quantity
         self.active = True
 
     def get_quantity(self) -> int:
@@ -64,7 +62,15 @@ class Product:
         Returns:
             None
         """
+        if quantity < 0:
+            raise ValueError('Quantity cannot be negative')
+
         self.quantity = quantity
+
+        if self.quantity == 0:
+            self.deactivate()
+        else:
+            self.activate()
 
     def is_active(self) -> bool:
         """
@@ -135,3 +141,28 @@ class Product:
         if self.quantity == 0:
             self.deactivate()
         return quantity * self.price
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+        super().__init__( name, price, 0)
+
+    def buy(self, quantity: int) -> float:
+        return quantity * self.price
+
+    def show(self):
+        print(f"{self.name}, Price: €{self.price}, Quantity: Unlimited")
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def buy(self, quantity: int) -> float:
+        if quantity > self.maximum:
+            raise ValueError(f'{self.name} limited to {self.maximum} per order!')
+        return quantity * self.price
+
+    def show(self):
+        print(f'{self.name}, Price: €{self.price}, Limited to {self.maximum} per order!, Promotion: None')

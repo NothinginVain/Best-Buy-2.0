@@ -1,4 +1,4 @@
-from products import Product
+from products import Product, LimitedProduct, NonStockedProduct
 from store import Store
 
 
@@ -169,11 +169,22 @@ def main():
         None
     """
     # setup initial stock of inventory
-    product_list = [Product("MacBook Air M2", price=1450, quantity=100),
-                    Product("Bose QuietComfort Earbuds", price=250,
-                            quantity=500),
-                    Product("Google Pixel 7", price=500, quantity=250)
-                    ]
+    # product_list = [Product("MacBook Air M2", price=1450, quantity=100),
+    #                 Product("Bose QuietComfort Earbuds", price=250,
+    #                         quantity=500),
+    #                 Product("Google Pixel 7", price=500, quantity=250)
+    #                 ]
+
+    # setup initial stock of inventory
+    product_list = [
+        Product("MacBook Air M2", price=1450, quantity=100),
+        Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+        Product("Google Pixel 7", price=500, quantity=250),
+        NonStockedProduct("Windows License", price=125),
+        LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+        ]
+
+
     best_buy = Store(product_list)
     start(best_buy)
 
